@@ -104,3 +104,101 @@ def unitarity_stats(A: Tensor) -> dict[str, float]:
         "abs_std_over_mean": float((abs_std / abs_mean.clamp_min(1e-12)).detach().cpu()),
         "scaled_unitarity_error": float(scaled_error.detach().cpu()),
     }
+
+
+def _model_device(model: Any) -> torch.device:
+    first_param = next(model.parameters(), None)
+    if first_param is not None:
+        return first_param.device
+    first_buffer = next(model.buffers(), None)
+    if first_buffer is not None:
+        return first_buffer.device
+    return torch.device("cpu")
+
+
+@torch.no_grad()
+def _evaluate_g_phi(model: Any, u: Tensor, v: Tensor) -> Tensor:
+    if not hasattr(model, "g_phi"):
+        raise ValueError("model must expose g_phi")
+    features = torch.stack([u.real, u.imag, v.real, v.imag], dim=-1)
+    out = model.g_phi(features)
+    return torch.complex(out[..., 0], out[..., 1]).to(torch.complex64)
+
+
+@torch.no_grad()
+def multiplication_probe(
+    model: Any,
+    data: dict[str, Tensor] | None = None,
+    mag_range: float | tuple[float, float] | None = None,
+    num: int = 8_192,
+    seed: int = 0,
+    mode: str = "encoded",
+) -> dict[str, Any]:
+    """Probe whether g_phi matches complex multiplication up to one scale."""
+    if num <= 0:
+        raise ValueError("num must be positive")
+
+    device = _model_device(model)
+    gen = torch.Generator(device=device)
+    gen.manual_seed(seed)
+
+    if data is not None and mode == "encoded":
+        if hasattr(model, "encode"):
+            u, v = model.encode(data["x"].to(device), data["h"].to(device))
+        else:
+            A = getattr(model, "A")
+            B = getattr(model, "B", A)
+            x_complex = data["x"].to(device=device, dtype=torch.complex64)
+            h_complex = data["h"].to(device=device, dtype=torch.complex64)
+            u = x_complex @ A.T
+            v = h_complex @ B.T
+        u_flat = u.reshape(-1)
+        v_flat = v.reshape(-1)
+        count = min(num, u_flat.numel())
+        idx = torch.randperm(u_flat.numel(), generator=gen, device=device)[:count]
+        u_probe = u_flat[idx]
+        v_probe = v_flat[idx]
+    else:
+        if mag_range is None and data is not None:
+            if hasattr(model, "encode"):
+                u_data, v_data = model.encode(data["x"].to(device), data["h"].to(device))
+            else:
+                A = getattr(model, "A")
+                B = getattr(model, "B", A)
+                u_data = data["x"].to(device=device, dtype=torch.complex64) @ A.T
+                v_data = data["h"].to(device=device, dtype=torch.complex64) @ B.T
+            max_mag = torch.quantile(torch.cat([u_data.abs().flatten(), v_data.abs().flatten()]), 0.95)
+            lo, hi = 0.0, float(max_mag.detach().cpu())
+        elif isinstance(mag_range, tuple):
+            lo, hi = float(mag_range[0]), float(mag_range[1])
+        elif mag_range is None:
+            lo, hi = 0.0, 2.0
+        else:
+            lo, hi = 0.0, float(mag_range)
+
+        radius_u = lo + (hi - lo) * torch.rand(num, generator=gen, device=device)
+        radius_v = lo + (hi - lo) * torch.rand(num, generator=gen, device=device)
+        phase_u = 2.0 * math.pi * torch.rand(num, generator=gen, device=device)
+        phase_v = 2.0 * math.pi * torch.rand(num, generator=gen, device=device)
+        u_probe = torch.complex(radius_u * torch.cos(phase_u), radius_u * torch.sin(phase_u)).to(torch.complex64)
+        v_probe = torch.complex(radius_v * torch.cos(phase_v), radius_v * torch.sin(phase_v)).to(torch.complex64)
+
+    g_pred = _evaluate_g_phi(model, u_probe, v_probe).reshape(-1)
+    product = (u_probe * v_probe).reshape(-1)
+    denom = torch.vdot(product, product)
+    if denom.abs() < 1e-12:
+        scale = torch.zeros((), dtype=torch.complex64, device=device)
+    else:
+        scale = torch.vdot(product, g_pred) / denom
+    target = scale * product
+    rel = torch.linalg.norm(g_pred - target) / torch.linalg.norm(target).clamp_min(1e-12)
+
+    return {
+        "mode": mode,
+        "num": int(g_pred.numel()),
+        "rel_residual": float(rel.detach().cpu()),
+        "scale": complex(scale.detach().cpu().item()),
+        "scale_real": float(scale.real.detach().cpu()),
+        "scale_imag": float(scale.imag.detach().cpu()),
+        "scale_abs": float(scale.abs().detach().cpu()),
+    }

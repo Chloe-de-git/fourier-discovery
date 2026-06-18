@@ -23,6 +23,6 @@ if torch.cuda.is_available():
     print("cuda_device", torch.cuda.get_device_name(0))
 PY
   /data/ziling/miniconda3/envs/fourier-discovery/bin/python -m src.experiments --mode full --results-dir results
-  /data/ziling/miniconda3/envs/fourier-discovery/bin/python visualize.py --checkpoint results/untied_n32_model.pt --n 32 --results-dir results
+  /data/ziling/miniconda3/envs/fourier-discovery/bin/python visualize.py --checkpoint results/spectral_neural_n32_full_model.pt --n 32 --results-dir results
   echo "finished_at=$(date -Is)"
 } 2>&1 | tee results/full_experiment.log
