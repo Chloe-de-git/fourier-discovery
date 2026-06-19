@@ -219,8 +219,19 @@ def _train_discovery_and_score(
     device: torch.device,
     seed: int,
     mode: str,
+    use_diag_loss: bool = True,
+    diag_loss_only: bool = False,
 ) -> dict[str, Any]:
     cfg = _discovery_phase_config(model.n, mode)
+    if not use_diag_loss:
+        cfg = {**cfg, "diag_loss_weight": 0.0}
+    objective = (
+        "diag_loss_only"
+        if diag_loss_only
+        else "mse_plus_diag_loss"
+        if use_diag_loss
+        else "mse_only"
+    )
     phase1 = train(
         model,
         train_ds,
@@ -232,11 +243,34 @@ def _train_discovery_and_score(
         device=device,
         seed=seed,
         save=False,
-        restore_best=True,
+        restore_best=not diag_loss_only,
+        mse_loss_weight=0.0 if diag_loss_only else 1.0,
         diag_loss_weight=cfg["diag_loss_weight"],
         diag_loss_kernels=cfg["diag_loss_kernels"],
         gauge_row_norm=cfg["gauge_row_norm"],
     )
+
+    if diag_loss_only:
+        final_train = evaluate_loss(model, train_ds, device)
+        final_test = evaluate_loss(model, test_ds, device)
+        history: dict[str, Any] = {
+            "strategy": "diag_loss_only_basis",
+            "discovery_objective": objective,
+            "use_diag_loss": True,
+            "diag_loss_only": True,
+            "device": str(device),
+            "batch": batch,
+            "config": cfg,
+            "phases": {"basis": phase1},
+            "elapsed_sec": phase1["elapsed_sec"],
+            "final_train_mse": final_train,
+            "final_test_mse": final_test,
+            "step": phase1["step"],
+            "train_mse": phase1["train_mse"],
+            "test_mse": phase1["test_mse"],
+        }
+        _save_checkpoint(model, history, results_dir, run_name)
+        return {"history": history, "test_mse": final_test}
 
     model.A.requires_grad_(False)
     phase2 = train(
@@ -272,7 +306,14 @@ def _train_discovery_and_score(
     final_train = evaluate_loss(model, train_ds, device)
     final_test = evaluate_loss(model, test_ds, device)
     history: dict[str, Any] = {
-        "strategy": "diag_regularized_basis_then_frozen_interaction",
+        "strategy": (
+            "diag_regularized_basis_then_frozen_interaction"
+            if use_diag_loss
+            else "task_loss_basis_then_frozen_interaction"
+        ),
+        "discovery_objective": objective,
+        "use_diag_loss": use_diag_loss,
+        "diag_loss_only": False,
         "device": str(device),
         "batch": batch,
         "config": cfg,
@@ -294,6 +335,8 @@ def run_all(
     mode: str,
     results_dir: str | Path = "results",
     device_name: str | None = None,
+    use_diag_loss: bool = True,
+    diag_loss_only: bool = False,
 ) -> dict[str, list[dict[str, Any]]]:
     out_dir = Path(results_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -332,6 +375,8 @@ def run_all(
             device,
             seed=10 + n,
             mode=mode,
+            use_diag_loss=use_diag_loss,
+            diag_loss_only=diag_loss_only,
         )
         sparse_mse = evaluate_loss(model, splits["ood_sparse"], device)
         structured_mse = evaluate_loss(model, splits["ood_structured"], device)
@@ -372,6 +417,8 @@ def run_all(
             device,
             seed=30 + int(snr),
             mode=mode,
+            use_diag_loss=use_diag_loss,
+            diag_loss_only=diag_loss_only,
         )
         mse_rows.append(
             {
@@ -404,6 +451,8 @@ def run_all(
         device,
         seed=40,
         mode=mode,
+        use_diag_loss=use_diag_loss,
+        diag_loss_only=diag_loss_only,
     )
     mse_rows.append(
         {
@@ -489,6 +538,8 @@ def run_all(
     summary = {
         "mode": mode,
         "device": str(device),
+        "use_diag_loss": use_diag_loss,
+        "diag_loss_only": diag_loss_only,
         "mse_rows": mse_rows,
         "diag_rows": diag_rows,
         "probe_rows": probe_rows,
@@ -503,8 +554,26 @@ def main() -> None:
     parser.add_argument("--mode", choices=["smoke", "full"], default="full")
     parser.add_argument("--results-dir", default="results")
     parser.add_argument("--device", default=None)
+    parser.add_argument(
+        "--no-diag-loss",
+        action="store_true",
+        help="Train discovery models without the diagonalization regularizer.",
+    )
+    parser.add_argument(
+        "--diag-loss-only",
+        action="store_true",
+        help="Train discovery models with only the diagonalization regularizer and no output MSE.",
+    )
     args = parser.parse_args()
-    run_all(args.mode, args.results_dir, args.device)
+    if args.no_diag_loss and args.diag_loss_only:
+        parser.error("--no-diag-loss and --diag-loss-only are mutually exclusive")
+    run_all(
+        args.mode,
+        args.results_dir,
+        args.device,
+        use_diag_loss=not args.no_diag_loss,
+        diag_loss_only=args.diag_loss_only,
+    )
 
 
 if __name__ == "__main__":

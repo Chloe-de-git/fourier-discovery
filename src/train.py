@@ -186,6 +186,7 @@ def train(
     encoded_loss_weight: float = 0.0,
     gauge_row_norm: float | None = None,
     scale_range: tuple[float, float] | None = None,
+    mse_loss_weight: float = 1.0,
     diag_loss_weight: float = 0.0,
     diag_loss_kernels: int | None = 8,
 ) -> dict[str, Any]:
@@ -218,6 +219,7 @@ def train(
         "encoded_loss_weight": encoded_loss_weight,
         "gauge_row_norm": gauge_row_norm,
         "scale_range": scale_range,
+        "mse_loss_weight": mse_loss_weight,
         "diag_loss_weight": diag_loss_weight,
         "diag_loss_kernels": diag_loss_kernels,
         "encoded_mse": [],
@@ -237,10 +239,16 @@ def train(
         x, h, y = _apply_scale_augmentation(x, h, y, scale_range)
 
         optimizer.zero_grad(set_to_none=True)
-        _, loss, _ = _model_prediction_and_loss(model, x, h, y, encoded_loss_weight)
+        loss: Tensor | None = None
+        if mse_loss_weight > 0.0:
+            _, task_loss, _ = _model_prediction_and_loss(model, x, h, y, encoded_loss_weight)
+            loss = mse_loss_weight * task_loss
         diag_loss = _diagonalization_loss(model, h, diag_loss_kernels) if diag_loss_weight > 0.0 else None
         if diag_loss is not None:
-            loss = loss + diag_loss_weight * diag_loss
+            weighted_diag = diag_loss_weight * diag_loss
+            loss = weighted_diag if loss is None else loss + weighted_diag
+        if loss is None:
+            raise ValueError("at least one of mse_loss_weight or diag_loss_weight must be positive")
         loss.backward()
         if grad_clip is not None:
             torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)

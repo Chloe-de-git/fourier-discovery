@@ -1,0 +1,87 @@
+{
+  "strategy": "diag_loss_only_basis",
+  "discovery_objective": "diag_loss_only",
+  "use_diag_loss": true,
+  "diag_loss_only": true,
+  "device": "cuda",
+  "batch": 512,
+  "config": {
+    "phase1_steps": 15000,
+    "phase2_steps": 40000,
+    "phase3_steps": 10000,
+    "diag_loss_weight": 20.0,
+    "diag_loss_kernels": 16,
+    "gauge_row_norm": 1.0
+  },
+  "phases": {
+    "basis": {
+      "step": [
+        1,
+        5000,
+        10000,
+        15000
+      ],
+      "train_mse": [
+        15.868186950683594,
+        15.867193222045898,
+        15.867193222045898,
+        15.867196083068848
+      ],
+      "test_mse": [
+        16.276805877685547,
+        16.274682998657227,
+        16.274682998657227,
+        16.27468490600586
+      ],
+      "device": "cuda",
+      "lr": 0.001,
+      "lr_basis": null,
+      "lr_interaction": null,
+      "batch": 512,
+      "grad_clip": null,
+      "restore_best": false,
+      "encoded_loss_weight": 0.0,
+      "gauge_row_norm": 1.0,
+      "scale_range": null,
+      "mse_loss_weight": 0.0,
+      "diag_loss_weight": 20.0,
+      "diag_loss_kernels": 16,
+      "encoded_mse": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "diag_loss": [
+        0.9481975436210632,
+        1.9188142286012677e-13,
+        1.4579441653950198e-07,
+        1.9309348431306717e-07
+      ],
+      "elapsed_sec": 23.961347579956055,
+      "final_train_mse": 15.867196083068848,
+      "final_test_mse": 16.27468490600586
+    }
+  },
+  "elapsed_sec": 23.961347579956055,
+  "final_train_mse": 15.867196083068848,
+  "final_test_mse": 16.27468490600586,
+  "step": [
+    1,
+    5000,
+    10000,
+    15000
+  ],
+  "train_mse": [
+    15.868186950683594,
+    15.867193222045898,
+    15.867193222045898,
+    15.867196083068848
+  ],
+  "test_mse": [
+    16.276805877685547,
+    16.274682998657227,
+    16.274682998657227,
+    16.27468490600586
+  ]
+}

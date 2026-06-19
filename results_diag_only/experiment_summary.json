@@ -1,0 +1,364 @@
+{
+  "mode": "full",
+  "device": "cuda",
+  "use_diag_loss": true,
+  "diag_loss_only": true,
+  "mse_rows": [
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 16,
+      "test_mse": 16.27468490600586,
+      "ood_sparse_mse": 2.0541672706604004,
+      "ood_structured_mse": 3.802218437194824,
+      "train_seconds": 23.961347579956055
+    },
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "test_mse": 31.921648025512695,
+      "ood_sparse_mse": 4.010213851928711,
+      "ood_structured_mse": 7.400330543518066,
+      "train_seconds": 24.821555852890015
+    },
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 64,
+      "test_mse": 64.02490234375,
+      "ood_sparse_mse": 7.996481895446777,
+      "ood_structured_mse": 14.397902488708496,
+      "train_seconds": 50.848369121551514
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 40.0,
+      "test_mse": 32.098854064941406
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 30.0,
+      "test_mse": 32.09053421020508
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 20.0,
+      "test_mse": 32.10332107543945
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 10.0,
+      "test_mse": 32.099098205566406
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 0.0,
+      "test_mse": 32.09721755981445
+    },
+    {
+      "experiment": "untied_variant",
+      "model": "SpectralNeuralModelUntied",
+      "n": 32,
+      "test_mse": 32.1015739440918,
+      "row_scaled_A_B_relative": 0.9843258261680603
+    },
+    {
+      "experiment": "baselines",
+      "model": "HardProductOracle",
+      "n": 32,
+      "test_mse": 5.482265197365166e-10,
+      "ood_sparse_mse": 6.75310085629377e-11,
+      "ood_structured_mse": 6.845292388479862e-11,
+      "params": 0
+    },
+    {
+      "experiment": "baselines",
+      "model": "HardProductLearnedBasis",
+      "n": 32,
+      "test_mse": 1.0250578164061608e-11,
+      "ood_sparse_mse": 1.180975673156781e-12,
+      "ood_structured_mse": 2.3683750273451043e-12,
+      "r2": 0.9999999999996804,
+      "var_y": 32.07537078857422,
+      "params": 1024
+    },
+    {
+      "experiment": "baselines",
+      "model": "BilinearTensor",
+      "n": 32,
+      "test_mse": 0.034435711801052094,
+      "ood_sparse_mse": 0.004216114059090614,
+      "ood_structured_mse": 0.007870535366237164,
+      "r2": 0.9989264126663403,
+      "var_y": 32.07537078857422,
+      "params": 32768
+    },
+    {
+      "experiment": "baselines",
+      "model": "MLPControl",
+      "n": 32,
+      "test_mse": 0.2489495426416397,
+      "ood_sparse_mse": 0.04935542121529579,
+      "ood_structured_mse": 0.06479056924581528,
+      "r2": 0.992238607488512,
+      "var_y": 32.07537078857422,
+      "params": 156448
+    },
+    {
+      "experiment": "baselines",
+      "model": "NonlinearEncoderControl",
+      "n": 32,
+      "test_mse": 8.247986793518066,
+      "ood_sparse_mse": 1.0017977952957153,
+      "ood_structured_mse": 1.8964768648147583,
+      "r2": 0.7428560733440956,
+      "var_y": 32.07537078857422,
+      "params": 34754
+    }
+  ],
+  "diag_rows": [
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 16,
+      "diag_residual": 1.9076595614286873e-07,
+      "dft_mean_row_residual": 0.0002033918740735885,
+      "dft_mean_abs_corr": 0.9999999850988388,
+      "abs_mean": 0.25,
+      "abs_std_over_mean": 0.00022401979367714375,
+      "scaled_unitarity_error": 0.0004360263410490006
+    },
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "diag_residual": 3.454609327491198e-07,
+      "dft_mean_row_residual": 0.0002288786792021824,
+      "dft_mean_abs_corr": 0.9999999199062586,
+      "abs_mean": 0.1767766922712326,
+      "abs_std_over_mean": 0.00029440311482176185,
+      "scaled_unitarity_error": 0.0005958685651421547
+    },
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 64,
+      "diag_residual": 1.9677558582564814e-07,
+      "dft_mean_row_residual": 0.0002644929032840082,
+      "dft_mean_abs_corr": 0.9999999599531293,
+      "abs_mean": 0.1250000149011612,
+      "abs_std_over_mean": 0.00021598294551949948,
+      "scaled_unitarity_error": 0.0004372051334939897
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 40.0,
+      "diag_residual": 2.0776941078715083e-07,
+      "dft_mean_row_residual": 0.0002323723427402058,
+      "dft_mean_abs_corr": 0.9999999590218067,
+      "abs_mean": 0.1767767071723938,
+      "abs_std_over_mean": 0.00022244291903916746,
+      "scaled_unitarity_error": 0.0004631686315406114
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 30.0,
+      "diag_residual": 4.167048586189992e-07,
+      "dft_mean_row_residual": 0.0002881318318124215,
+      "dft_mean_abs_corr": 0.9999998845160007,
+      "abs_mean": 0.1767766922712326,
+      "abs_std_over_mean": 0.0003288681327831,
+      "scaled_unitarity_error": 0.000666254258248955
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 20.0,
+      "diag_residual": 8.843769971900173e-08,
+      "dft_mean_row_residual": 0.00011885247634779716,
+      "dft_mean_abs_corr": 0.9999999888241291,
+      "abs_mean": 0.1767767071723938,
+      "abs_std_over_mean": 0.0001470274874009192,
+      "scaled_unitarity_error": 0.00030813345802016556
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 10.0,
+      "diag_residual": 2.2574066114167124e-06,
+      "dft_mean_row_residual": 0.0003751007930787864,
+      "dft_mean_abs_corr": 0.9999994989484549,
+      "abs_mean": 0.17677664756774902,
+      "abs_std_over_mean": 0.0008167094201780856,
+      "scaled_unitarity_error": 0.001437192433513701
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "snr_db": 0.0,
+      "diag_residual": 2.1572802966218774e-07,
+      "dft_mean_row_residual": 0.00019401043608979762,
+      "dft_mean_abs_corr": 0.9999999590218067,
+      "abs_mean": 0.1767767071723938,
+      "abs_std_over_mean": 0.0002216435968875885,
+      "scaled_unitarity_error": 0.00045668971142731607
+    },
+    {
+      "experiment": "untied_variant",
+      "model": "SpectralNeuralModelUntied",
+      "n": 32,
+      "diag_residual": 6.727358050628851e-07,
+      "dft_mean_row_residual": 0.00027453807691557586,
+      "dft_mean_abs_corr": 0.9999998658895493,
+      "abs_mean": 0.1767766773700714,
+      "abs_std_over_mean": 0.0003606521349865943,
+      "scaled_unitarity_error": 0.0008264102507382631
+    },
+    {
+      "experiment": "baselines",
+      "model": "HardProductLearnedBasis",
+      "n": 32,
+      "diag_residual": 2.8740096600365103e-13,
+      "dft_mean_row_residual": 1.7244640417857227e-06,
+      "dft_mean_abs_corr": 0.9999999664723873,
+      "abs_mean": 1.0,
+      "abs_std_over_mean": 6.311042000106681e-08,
+      "scaled_unitarity_error": 1.3432492096399073e-07
+    }
+  ],
+  "probe_rows": [
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 16,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 179.84616088867188,
+      "scale_real": 0.0005751171265728772,
+      "scale_imag": 0.000550988654140383,
+      "scale_abs": 0.000796459789853543
+    },
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 24.42630386352539,
+      "scale_real": -0.002254731021821499,
+      "scale_imag": -0.005772527307271957,
+      "scale_abs": 0.0061972481198608875
+    },
+    {
+      "experiment": "size_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 64,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 59.17984390258789,
+      "scale_real": -0.0005955041269771755,
+      "scale_imag": -0.0024260138161480427,
+      "scale_abs": 0.002498032758012414
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 79.63336944580078,
+      "scale_real": 0.0010578088695183396,
+      "scale_imag": -0.0014902607072144747,
+      "scale_abs": 0.0018275219481438398,
+      "snr_db": 40.0
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 27.73605728149414,
+      "scale_real": -0.0012670437572523952,
+      "scale_imag": -0.005342851858586073,
+      "scale_abs": 0.005491035059094429,
+      "snr_db": 30.0
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 33.614646911621094,
+      "scale_real": -0.002881739754229784,
+      "scale_imag": -0.003349397797137499,
+      "scale_abs": 0.004418471362441778,
+      "snr_db": 20.0
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 36.36396789550781,
+      "scale_real": -0.001969454577192664,
+      "scale_imag": -0.003596368245780468,
+      "scale_abs": 0.004100318998098373,
+      "snr_db": 10.0
+    },
+    {
+      "experiment": "noise_sweep",
+      "model": "SpectralNeuralModel",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 46.12253952026367,
+      "scale_real": 0.0012726415880024433,
+      "scale_imag": -0.0029213414527475834,
+      "scale_abs": 0.0031865111086517572,
+      "snr_db": 0.0
+    },
+    {
+      "experiment": "untied_variant",
+      "model": "SpectralNeuralModelUntied",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 24.156301498413086,
+      "scale_real": -0.005708797834813595,
+      "scale_imag": -0.002253057900816202,
+      "scale_abs": 0.006137315649539232
+    },
+    {
+      "experiment": "baselines",
+      "model": "NonlinearEncoderControl",
+      "n": 32,
+      "probe_mode": "encoded",
+      "probe_num": 4096,
+      "rel_residual": 1.0643199682235718,
+      "scale_real": 4.919921875,
+      "scale_imag": 3.711808443069458,
+      "scale_abs": 6.1630473136901855
+    }
+  ]
+}

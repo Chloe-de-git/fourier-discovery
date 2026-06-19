@@ -1,0 +1,205 @@
+{
+  "strategy": "task_loss_basis_then_frozen_interaction",
+  "use_diag_loss": false,
+  "device": "cuda",
+  "batch": 512,
+  "config": {
+    "phase1_steps": 15000,
+    "phase2_steps": 40000,
+    "phase3_steps": 10000,
+    "diag_loss_weight": 0.0,
+    "diag_loss_kernels": 16,
+    "gauge_row_norm": 1.0
+  },
+  "phases": {
+    "basis": {
+      "step": [
+        1,
+        5000,
+        10000,
+        15000
+      ],
+      "train_mse": [
+        15.864027976989746,
+        0.08467648923397064,
+        0.01808207295835018,
+        0.013155832886695862
+      ],
+      "test_mse": [
+        16.278844833374023,
+        0.08635231852531433,
+        0.018804116174578667,
+        0.013900230638682842
+      ],
+      "device": "cuda",
+      "lr": 0.001,
+      "lr_basis": null,
+      "lr_interaction": null,
+      "batch": 512,
+      "grad_clip": null,
+      "restore_best": true,
+      "encoded_loss_weight": 0.0,
+      "gauge_row_norm": 1.0,
+      "scale_range": null,
+      "diag_loss_weight": 0.0,
+      "diag_loss_kernels": 16,
+      "encoded_mse": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "diag_loss": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "best_test_mse": 0.013900230638682842,
+      "elapsed_sec": 31.525141954421997,
+      "final_train_mse": 0.013155832886695862,
+      "final_test_mse": 0.013900230638682842
+    },
+    "interaction": {
+      "step": [
+        1,
+        10000,
+        20000,
+        30000,
+        40000
+      ],
+      "train_mse": [
+        8.315278053283691,
+        0.014150536619126797,
+        0.01053599826991558,
+        0.010674850083887577,
+        0.011062142439186573
+      ],
+      "test_mse": [
+        8.313225746154785,
+        0.015141045674681664,
+        0.011695223860442638,
+        0.011894907802343369,
+        0.012242676690220833
+      ],
+      "device": "cuda",
+      "lr": 0.001,
+      "lr_basis": null,
+      "lr_interaction": null,
+      "batch": 512,
+      "grad_clip": null,
+      "restore_best": true,
+      "encoded_loss_weight": 0.0,
+      "gauge_row_norm": 1.0,
+      "scale_range": null,
+      "diag_loss_weight": 0.0,
+      "diag_loss_kernels": 8,
+      "encoded_mse": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "diag_loss": [
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "best_test_mse": 0.011695223860442638,
+      "elapsed_sec": 67.07617354393005,
+      "final_train_mse": 0.01053599826991558,
+      "final_test_mse": 0.011695223860442638
+    },
+    "interaction_finetune": {
+      "step": [
+        1,
+        5000,
+        10000
+      ],
+      "train_mse": [
+        0.24819102883338928,
+        0.01027391292154789,
+        0.009481992572546005
+      ],
+      "test_mse": [
+        0.25173237919807434,
+        0.011280103586614132,
+        0.010444233193993568
+      ],
+      "device": "cuda",
+      "lr": 0.0003,
+      "lr_basis": null,
+      "lr_interaction": null,
+      "batch": 512,
+      "grad_clip": null,
+      "restore_best": true,
+      "encoded_loss_weight": 0.0,
+      "gauge_row_norm": 1.0,
+      "scale_range": null,
+      "diag_loss_weight": 0.0,
+      "diag_loss_kernels": 8,
+      "encoded_mse": [
+        null,
+        null,
+        null
+      ],
+      "diag_loss": [
+        null,
+        null,
+        null
+      ],
+      "best_test_mse": 0.010444233193993568,
+      "elapsed_sec": 16.45979118347168,
+      "final_train_mse": 0.009481992572546005,
+      "final_test_mse": 0.010444233193993568
+    }
+  },
+  "elapsed_sec": 115.06110668182373,
+  "final_train_mse": 0.009481992572546005,
+  "final_test_mse": 0.010444233193993568,
+  "step": [
+    1,
+    5000,
+    10000,
+    15000,
+    15001,
+    25000,
+    35000,
+    45000,
+    55000,
+    55001,
+    60000,
+    65000
+  ],
+  "train_mse": [
+    15.864027976989746,
+    0.08467648923397064,
+    0.01808207295835018,
+    0.013155832886695862,
+    8.315278053283691,
+    0.014150536619126797,
+    0.01053599826991558,
+    0.010674850083887577,
+    0.011062142439186573,
+    0.24819102883338928,
+    0.01027391292154789,
+    0.009481992572546005
+  ],
+  "test_mse": [
+    16.278844833374023,
+    0.08635231852531433,
+    0.018804116174578667,
+    0.013900230638682842,
+    8.313225746154785,
+    0.015141045674681664,
+    0.011695223860442638,
+    0.011894907802343369,
+    0.012242676690220833,
+    0.25173237919807434,
+    0.011280103586614132,
+    0.010444233193993568
+  ]
+}
