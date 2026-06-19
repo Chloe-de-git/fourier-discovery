@@ -1,6 +1,6 @@
 # Fourier Discovery
 
-This project learns circular convolution from random examples while discovering both:
+This AI-for-Math project learns circular convolution from random examples while discovering both:
 
 - a complex linear basis `A` where convolution becomes coordinate independent;
 - a shared coordinate-wise neural interaction `g_phi` that should learn complex multiplication up to scale.
