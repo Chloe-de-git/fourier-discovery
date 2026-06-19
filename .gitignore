@@ -3,4 +3,4 @@ __pycache__/
 .pytest_cache/
 results/.mplconfig/
 presentation_notes.md
-docs/
+docs/experiment_report.md
