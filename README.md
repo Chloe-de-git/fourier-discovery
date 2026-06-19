@@ -28,11 +28,12 @@ This project was developed with assistance from OpenAI Codex, a coding agent bas
 
 ## Environment
 
-Use a project-local conda environment under `/data/ziling`:
+Create a local Python environment:
 
 ```bash
-/data/ziling/miniconda3/bin/conda create -y -n fourier-discovery python=3.11
-/data/ziling/miniconda3/envs/fourier-discovery/bin/pip install -r requirements.txt
+conda create -y -n fourier-discovery python=3.11
+conda activate fourier-discovery
+pip install -r requirements.txt
 ```
 
 The code automatically uses CUDA when `torch.cuda.is_available()` is true and otherwise runs on CPU.
@@ -40,21 +41,21 @@ The code automatically uses CUDA when `torch.cuda.is_available()` is true and ot
 ## Quick Checks
 
 ```bash
-PYTHONPATH=. /data/ziling/miniconda3/envs/fourier-discovery/bin/pytest -q
+PYTHONPATH=. pytest -q
 ```
 
 Run a small smoke experiment:
 
 ```bash
-PYTHONPATH=. /data/ziling/miniconda3/envs/fourier-discovery/bin/python -m src.experiments --mode smoke --results-dir /tmp/fourier-discovery-smoke
-PYTHONPATH=. /data/ziling/miniconda3/envs/fourier-discovery/bin/python visualize.py --results-dir /tmp/fourier-discovery-smoke
+PYTHONPATH=. python -m src.experiments --mode smoke --results-dir /tmp/fourier-discovery-smoke
+PYTHONPATH=. python visualize.py --results-dir /tmp/fourier-discovery-smoke
 ```
 
 Run the full experiment suite:
 
 ```bash
-PYTHONPATH=. /data/ziling/miniconda3/envs/fourier-discovery/bin/python -m src.experiments --mode full
-PYTHONPATH=. /data/ziling/miniconda3/envs/fourier-discovery/bin/python visualize.py --checkpoint results/spectral_neural_n32_full_model.pt
+PYTHONPATH=. python -m src.experiments --mode full
+PYTHONPATH=. python visualize.py --checkpoint results/spectral_neural_n32_full_model.pt
 ```
 
 Results are written as CSV tables, PyTorch checkpoints, JSON histories, and PNG figures.

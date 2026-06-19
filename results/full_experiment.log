@@ -1,5 +1,5 @@
 started_at=2026-06-14T13:19:36+00:00
-cwd=/data/ziling/aidf/fourier-discovery
+repo=fourier-discovery
 CUDA_VISIBLE_DEVICES=1
 torch 2.12.0+cu130
 cuda_available True
